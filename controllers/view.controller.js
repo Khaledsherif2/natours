@@ -31,6 +31,12 @@ exports.getTour = async (req, res) => {
   });
 };
 
+exports.getSignupForm = async (req, res) => {
+  res.status(200).render('signup', {
+    title: 'Sign up for free',
+  });
+};
+
 exports.getLoginForm = async (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',

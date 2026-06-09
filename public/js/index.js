@@ -1,5 +1,6 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import { signup } from './signup';
 import { login, logout } from './login';
 import { displayMap } from './mapBox';
 import { updateSettings } from './updateSettings';
@@ -8,6 +9,7 @@ import { showAlert } from './alerts';
 
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.login-form > .form');
+const signupForm = document.querySelector('.signup-form > .form');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
 const updatePasswordForm = document.querySelector('.form-user-settings');
@@ -18,6 +20,22 @@ if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations, startLocation);
 }
+
+if (signupForm)
+  signupForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    document.querySelector('.btn--green').textContent = 'Processing...';
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await signup({ name, email, password, passwordConfirm });
+    document.querySelector('.btn--green').textContent = 'sign up';
+    document.getElementById('name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
+  });
 
 if (loginForm)
   loginForm.addEventListener('submit', e => {
