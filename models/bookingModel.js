@@ -25,6 +25,15 @@ const bookingSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  stripeSessionId: {
+    type: String,
+    unique: true,
+  },
+  stripePaymentIntentId: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
 });
 
 bookingSchema.pre(/^find/, async function () {

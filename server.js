@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './config.env' });
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 process.on('uncaughtException', err => {
@@ -18,8 +18,8 @@ const DB = process.env.DATABASE.replace(
 
 mongoose
   .connect(DB)
-  .then(_ => console.log('🚀 ~ connected to DB successfuly'))
-  .catch(err => console.error('🚀 ~ err:', err));
+  .then(_ => console.log('🚀 ~ connected to DB successfully'))
+  .catch(err => console.error('🚀 ~ connected to Database ~ error:', err));
 
 const port = process.env.PORT || 8000;
 const server = app.listen(port, _ => {

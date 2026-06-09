@@ -3,6 +3,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Booking = require('../models/bookingModel');
 const Tour = require('../models/tourModel');
 const factory = require('../controllers/handlerFactory');
+const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = async (req, res) => {
   const tour = await Tour.findById(req.params.tourId);
@@ -10,10 +11,14 @@ exports.getCheckoutSession = async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
-    success_url: `${req.protocol}://${req.get('host')}/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/my-tours`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
+    metadata: {
+      tourId: tour.id,
+      userId: req.user.id,
+    },
     line_items: [
       {
         price_data: {
@@ -22,7 +27,9 @@ exports.getCheckoutSession = async (req, res) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+            images: [
+              `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`,
+            ],
           },
         },
         quantity: 1,
@@ -36,12 +43,43 @@ exports.getCheckoutSession = async (req, res) => {
   });
 };
 
-exports.createBookingCheckout = async (req, res, next) => {
-  const { tour, user, price } = req.query;
-  if (!tour && !user && !price) return next();
-  await Booking.create({ tour, user, price });
+const createBookingChecout = async session => {
+  const { tourId, userId } = session.metadata;
+  const existingBooking = await Booking.findOne({
+    stripeSessionId: session.id,
+  });
+  if (existingBooking) return;
+  const tour = await Tour.findById(tourId);
+  if (!tour) {
+    throw new AppError('No Tour found with that id', 404);
+  }
+  await Booking.create({
+    tour: tourId,
+    user: userId,
+    price: tour.price,
+    stripeSessionId: session.id,
+    stripePaymentIntentId: session.payment_intent,
+  });
+};
 
-  res.redirect(req.originalUrl.split('?')[0]);
+exports.webhookCheckout = async (req, res, next) => {
+  const signature = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET,
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+  if (
+    event.type === 'checkout.session.completed' &&
+    event.data.object.payment_status === 'paid'
+  )
+    await createBookingChecout(event.data.object);
+  res.status(200).json({ recevied: true });
 };
 
 exports.createBooking = factory.createOne(Booking);

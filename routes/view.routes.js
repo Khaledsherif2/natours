@@ -13,12 +13,7 @@ router.post(
   viewsController.updateUserData,
 );
 
-router.get(
-  '/',
-  bookController.createBookingCheckout,
-  authController.isLoggedIn,
-  viewsController.getOverview,
-);
+router.get('/', authController.isLoggedIn, viewsController.getOverview);
 
 router.use(authController.isLoggedIn);
 

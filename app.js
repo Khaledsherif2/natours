@@ -14,6 +14,7 @@ const tourRouter = require('./routes/tour.routes');
 const userRouter = require('./routes/user.routes');
 const reviewRouter = require('./routes/review.routes');
 const bookingRouter = require('./routes/booking.routes');
+const bookingController = require('./controllers/booking.controller');
 const viewRouter = require('./routes/view.routes');
 
 const app = express();
@@ -23,7 +24,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES
 app.use(cors());
-app.options('*', cros());
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -71,6 +71,12 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!',
 });
 app.use('/api', limiter);
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
