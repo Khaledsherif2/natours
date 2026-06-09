@@ -56,6 +56,12 @@ A full-stack tour booking application built with Node.js, Express, MongoDB, and 
 
 ---
 
+## 🔗 Live Preview
+
+🚀 [View Live Project](https://natours.runasp.net/)
+
+---
+
 ## API Endpoints
 
 ### Authentication
