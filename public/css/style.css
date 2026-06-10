@@ -406,16 +406,15 @@ html {
   align-items: center;
   text-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
 }
-.heading-box__detail svg {
+.heading-box__detail i {
   margin-right: 0.8rem;
 }
 .heading-box__detail:not(:last-child) {
   margin-right: 4rem;
 }
 .heading-box__icon {
-  height: 2rem;
-  width: 2rem;
-  fill: currentColor;
+  font-size: 2rem;
+  color: currentColor;
   -webkit-filter: drop-shadow(0 0.75rem 0.5rem rgba(0, 0, 0, 0.25));
   filter: drop-shadow(0 0.75rem 0.5rem rgba(0, 0, 0, 0.25));
 }
@@ -465,16 +464,15 @@ html {
   align-items: center;
   font-weight: 400;
 }
-.overview-box__detail svg {
+.overview-box__detail i {
   margin-right: 1.25rem;
 }
 .overview-box__detail:not(:last-child) {
   margin-bottom: 2.25rem;
 }
 .overview-box__icon {
-  height: 2.25rem;
-  width: 2.25rem;
-  fill: #55c57a;
+  font-size: 2.25rem;
+  color: #55c57a;
 }
 .overview-box__label {
   font-weight: 700;
@@ -652,10 +650,10 @@ html {
   margin-right: 1px;
 }
 .reviews__star--active {
-  fill: #55c57a;
+  color: #55c57a;
 }
 .reviews__star--inactive {
-  fill: #bbb;
+  color: #bbb;
 }
 .section-cta {
   margin-top: calc(0px - var(--section-rotate));
@@ -961,10 +959,9 @@ html {
   -webkit-transform: translateY(1px);
   transform: translateY(1px);
 }
-.nav__search-btn svg {
-  height: 2rem;
-  width: 2rem;
-  fill: #f7f7f7;
+.nav__search-btn i {
+  font-size: 2rem;
+  color: #f7f7f7;
 }
 .nav__search-input {
   font-family: inherit;
@@ -1042,10 +1039,9 @@ html {
   -webkit-transform: translateX(3px);
   transform: translateX(3px);
 }
-.side-nav svg {
-  height: 1.9rem;
-  width: 1.9rem;
-  fill: #f7f7f7;
+.side-nav i {
+  font-size: 1.9rem;
+  color: #f7f7f7;
   margin-right: 2rem;
 }
 .admin-nav {
@@ -1153,13 +1149,12 @@ html {
   -ms-flex-align: center;
   align-items: center;
 }
-.card__data svg {
+.card__data i {
   margin-right: 0.7rem;
 }
 .card__icon {
-  height: 2rem;
-  width: 2rem;
-  fill: #55c57a;
+  font-size: 2rem;
+  color: #55c57a;
 }
 .card__footer {
   background-color: #f7f7f7;
